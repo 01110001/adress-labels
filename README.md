@@ -1,6 +1,6 @@
-# Générateur d'étiquettes d'adresses Viabois
+# Générateur d'étiquettes d'adresses
 
-Ce petit projet crée un document Word imprimable (`.docx`) à partir d'un fichier Excel contenant des adresses. Le document produit des blocs découpables pour coller sur des colis, avec l'expéditeur Viabois sur chaque bloc.
+Ce petit projet crée un document Word imprimable (`.docx`) à partir d'un fichier Excel contenant des adresses. Le document produit des blocs découpables pour coller sur des colis.
 
 ## Fichier Excel attendu
 
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 Commande de base:
 
 ```bash
-python generate_address_labels.py adresses.xlsx etiquettes_adresses_colis_viabois.docx
+python generate_address_labels.py adresses.xlsx etiquettes_adresses_colis.docx
 ```
 
 Commande avec une feuille différente:
@@ -44,16 +44,4 @@ python generate_address_labels.py adresses.xlsx etiquettes.docx --sheet Table1
 
 - Papier Lettre, orientation portrait.
 - 8 blocs d'adresse par page: 2 colonnes x 4 lignes.
-- Chaque bloc contient:
-  - l'expéditeur Viabois;
-  - le destinataire;
-  - une bordure légère pour faciliter le découpage.
-
-## Expéditeur inclus
-
-```text
-Viabois
-311 rue du camionneur
-Saint-Isidore, QC G0S 1S0
-Canada
-```
+- Chaque bloc contient l'adresse du destinataire et une bordure légère pour faciliter le découpage.
