@@ -6,15 +6,7 @@ Ce petit projet crée un document Word imprimable (`.docx`) à partir d'un fichi
 
 Le fichier Excel doit contenir une feuille nommée `Table1`.
 
-La première ligne doit contenir exactement ces champs:
-
-| Champ | Description | Exemple |
-| --- | --- | --- |
-| `street` | Adresse civique / rue du destinataire | `919 rue Moreau` |
-| `city` | Ville du destinataire | `Wickham` |
-| `state` | Province ou état | `QC` |
-| `zip_code` | Code postal | `J0C1S0` |
-| `company_name` | Nom de l'entreprise ou du destinataire | `Transport Michel Noel` |
+La première ligne doit contenir les colonnes attendues par le script, sans données personnelles dans le README. Les noms exacts des colonnes sont définis dans `generate_address_labels.py`.
 
 Les colonnes peuvent contenir des accents. Le script imprime les données telles quelles: il ne corrige pas les codes postaux manquants ou mal formatés.
 
