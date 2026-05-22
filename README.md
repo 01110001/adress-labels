@@ -10,21 +10,12 @@ La première ligne doit contenir les colonnes attendues par le script, sans donn
 
 Les colonnes peuvent contenir des accents. Le script imprime les données telles quelles: il ne corrige pas les codes postaux manquants ou mal formatés.
 
-| Champ          | Description                            | 
-| -------------- | -------------------------------------- |
-| `street`       | Adresse civique / rue du destinataire  |
-| `city`         | Ville du destinataire                  |
-| `state`        | Province ou état                       |
-| `zip_code`     | Code postal                            | 
-| `company_name` | Nom de l'entreprise ou du destinataire | 
-
-
 ## Installation
 
-Installer les dépendances Python:
+Installer le projet et ses dépendances Python:
 
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 ## Utilisation
