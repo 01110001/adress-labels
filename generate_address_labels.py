@@ -12,13 +12,6 @@ from docx.shared import Cm, Pt, RGBColor
 
 REQUIRED_COLUMNS = ["street", "city", "state", "zip_code", "company_name"]
 
-SENDER_LINES = [
-    "Viabois",
-    "311 rue du camionneur",
-    "Saint-Isidore, QC G0S 1S0",
-    "Canada",
-]
-
 
 def set_cell_border(cell, color="BDBDBD", size="8"):
     tc_pr = cell._tc.get_or_add_tcPr()
@@ -91,25 +84,15 @@ def add_address_block(cell, row):
     cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
 
     paragraph = cell.add_paragraph()
-    paragraph.paragraph_format.space_after = Pt(0)
-    add_run(paragraph, "EXPEDITEUR", size=6.5, bold=True, color=(90, 90, 90))
-
-    for line in SENDER_LINES:
-        paragraph = cell.add_paragraph()
-        paragraph.paragraph_format.space_after = Pt(0)
-        add_run(paragraph, line, size=7.2, color=(75, 75, 75))
-
-    paragraph = cell.add_paragraph()
-    paragraph.paragraph_format.space_before = Pt(5)
-    paragraph.paragraph_format.space_after = Pt(1)
+    paragraph.paragraph_format.space_after = Pt(2)
     add_run(paragraph, "DESTINATAIRE", size=7, bold=True, color=(45, 45, 45))
 
     city_line = f"{text_value(row['city'])}, {text_value(row['state'])} {text_value(row['zip_code'])}".strip()
     destination_lines = [
-        (text_value(row["company_name"]), 11.5, True),
-        (text_value(row["street"]), 10.5, False),
-        (city_line, 10.5, False),
-        ("Canada", 10.5, False),
+        (text_value(row["company_name"]), 12.5, True),
+        (text_value(row["street"]), 11.5, False),
+        (city_line, 11.5, False),
+        ("Canada", 11.5, False),
     ]
 
     for text, size, bold in destination_lines:
