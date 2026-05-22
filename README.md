@@ -40,8 +40,16 @@ Commande avec une feuille différente:
 python generate_address_labels.py adresses.xlsx etiquettes.docx --sheet Table1
 ```
 
+Commande avec un expéditeur à entrer au clavier:
+
+```bash
+python generate_address_labels.py adresses.xlsx etiquettes.docx --set-expediteur
+```
+
+Avec `--set-expediteur`, le programme demande le nom, l'adresse, la ville, la province ou l'état, le code postal et le pays. Les champs laissés vides sont ignorés.
+
 ## Format produit
 
 - Papier Lettre, orientation portrait.
 - 8 blocs d'adresse par page: 2 colonnes x 4 lignes.
-- Chaque bloc contient l'adresse du destinataire et une bordure légère pour faciliter le découpage.
+- Chaque bloc contient l'adresse du destinataire, l'expéditeur seulement si l'option est utilisée, et une bordure légère pour faciliter le découpage.
