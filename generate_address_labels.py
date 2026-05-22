@@ -77,22 +77,55 @@ def text_value(value):
     return "" if value is None else str(value).strip()
 
 
-def add_address_block(cell, row):
+def prompt_sender_lines():
+    print("Entrez les informations de l'expéditeur. Laissez vide pour ignorer un champ.")
+    prompts = [
+        "Nom de l'expéditeur",
+        "Adresse",
+        "Ville",
+        "Province ou état",
+        "Code postal",
+        "Pays",
+    ]
+    return [value for value in (input(f"{prompt}: ").strip() for prompt in prompts) if value]
+
+
+def add_sender_block(cell, sender_lines):
+    if not sender_lines:
+        return
+
+    paragraph = cell.add_paragraph()
+    paragraph.paragraph_format.space_after = Pt(0)
+    add_run(paragraph, "EXPÉDITEUR", size=6.5, bold=True, color=(90, 90, 90))
+
+    for line in sender_lines:
+        paragraph = cell.add_paragraph()
+        paragraph.paragraph_format.space_after = Pt(0)
+        add_run(paragraph, line, size=7.2, color=(75, 75, 75))
+
+
+def add_address_block(cell, row, sender_lines=None):
     clear_cell(cell)
     set_cell_border(cell)
     set_cell_margins(cell)
     cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
 
+    add_sender_block(cell, sender_lines)
+
     paragraph = cell.add_paragraph()
-    paragraph.paragraph_format.space_after = Pt(2)
+    if sender_lines:
+        paragraph.paragraph_format.space_before = Pt(5)
+        paragraph.paragraph_format.space_after = Pt(1)
+    else:
+        paragraph.paragraph_format.space_after = Pt(2)
     add_run(paragraph, "DESTINATAIRE", size=7, bold=True, color=(45, 45, 45))
 
     city_line = f"{text_value(row['city'])}, {text_value(row['state'])} {text_value(row['zip_code'])}".strip()
     destination_lines = [
-        (text_value(row["company_name"]), 12.5, True),
-        (text_value(row["street"]), 11.5, False),
-        (city_line, 11.5, False),
-        ("Canada", 11.5, False),
+        (text_value(row["company_name"]), 11.5 if sender_lines else 12.5, True),
+        (text_value(row["street"]), 10.5 if sender_lines else 11.5, False),
+        (city_line, 10.5 if sender_lines else 11.5, False),
+        ("Canada", 10.5 if sender_lines else 11.5, False),
     ]
 
     for text, size, bold in destination_lines:
@@ -120,7 +153,7 @@ def read_rows(source_path, sheet_name):
     return rows
 
 
-def build_document(rows):
+def build_document(rows, sender_lines=None):
     document = Document()
     section = document.sections[0]
     section.page_width = Cm(21.59)
@@ -152,7 +185,7 @@ def build_document(rows):
         page_rows = rows[page_start : page_start + labels_per_page]
         for index, row in enumerate(page_rows):
             row_index, column_index = divmod(index, 2)
-            add_address_block(table.cell(row_index, column_index), row)
+            add_address_block(table.cell(row_index, column_index), row, sender_lines)
 
         for index in range(len(page_rows), labels_per_page):
             row_index, column_index = divmod(index, 2)
@@ -168,10 +201,16 @@ def main():
     parser.add_argument("excel_path", type=Path, help="Chemin du fichier Excel source.")
     parser.add_argument("output_path", type=Path, help="Chemin du document Word à créer.")
     parser.add_argument("--sheet", default="Table1", help="Nom de la feuille Excel à lire. Défaut: Table1.")
+    parser.add_argument(
+        "--set-expediteur",
+        action="store_true",
+        help="Demander les informations de l'expéditeur et les ajouter sur chaque étiquette.",
+    )
     args = parser.parse_args()
 
+    sender_lines = prompt_sender_lines() if args.set_expediteur else None
     rows = read_rows(args.excel_path, args.sheet)
-    document = build_document(rows)
+    document = build_document(rows, sender_lines)
     args.output_path.parent.mkdir(parents=True, exist_ok=True)
     document.save(args.output_path)
     print(f"Document créé: {args.output_path}")
